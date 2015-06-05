@@ -112,17 +112,23 @@ Gaussian_rref <- function(A, simplify = FALSE){
   # Now Let's Focus On The Elimination
   for(i in 1:(new_m_rows - 1)){
     # Get lowest coefficient for cuurent variable
-    ind <- which(B[,i] == min(abs(B[B[,i] != 0, i])))[1]
+    ind <- which(abs(B[,i]) == min(abs(B[B[i:new_m_rows,i] != 0, i])))[1]
+    ind <- (i - 1) + ind # Calibrating indices
+    # Putting the if statement here
+    if(ind != i){ # Only swap when ind != i
     temp <- B[i,] # Save first row as temporary
     B[i,] <- B[ind,] # Set first row to have lowest coef
     B[ind,] <- temp # Complete the swap of rows
+    }
     
     pivot <- B[i,i] # Get leading coef of pivot row
     
     for(j in (i+1):new_m_rows){
       mul = B[j,i] # Get leading coef of current row
       # Update current row to eliminate leading coef
-      B[j,] <- mul*B[i,] - pivot*B[j,]
+#      B[j,] <- mul*B[i,] - pivot*B[j,]
+      # Use this instead: it avoids large nbers
+      B[j,] <- B[j,]  - (mul/pivot)*B[i,]
     }
   } 
   
@@ -154,7 +160,8 @@ Gaussian_rref_adj <- function(A){
   count <- 0 # This will determine how many time we swap rows
   for(i in 1:(m_rows - 1)){
     # Get lowest coefficient for cuurent variable
-    ind <- which(B[,i] == min(abs(B[B[i:m_rows,i] != 0, i])))[1]
+    # Just noticed that abs is required on both ends
+    ind <- which(abs(B[,i]) == min(abs(B[B[i:m_rows,i] != 0, i])))[1]
     ind <- (i - 1) + ind # I noticed that the indices
     # must be calibrated by how far from the first row we are
     # This determines if we have to swap rows
@@ -174,10 +181,10 @@ Gaussian_rref_adj <- function(A){
       # Update current row to eliminate leading coef
       B[j,] <- B[j,]  - (mul/pivot)*B[i,]
     }
-  } 
-  
-  return(B)
+  }   
+  return(list(data = B, nber = count))
 }
+###
 
 Rref_det <- function(A){
   if(!is.matrix(A)){
@@ -206,4 +213,6 @@ Rref_det <- function(A){
     }
   }
   # Now we can perform the adjusted rref function
+  # I will use a function that I created before to get
+  # diagonals of the matrices.
 }
