@@ -282,7 +282,7 @@ inv_mat <- function(A){
   A <- cbind(A,diag(nrow(A))) # nrow(A) = ncol(A) so we're fine
   # There won't be any linearly dependent columns or rows
   # Or zero rows or columns so we can rely Gaussian_rref.
-  A <- simp_mat(Gaussian_rref(A, simplify = TRUE))
+  A <- Gaussian_rref(A, simplify = TRUE)
   A <- uptri_id(A)
   return(A[,(m_col+1):(2*m_col)]) # Return right side of matrix
 }
