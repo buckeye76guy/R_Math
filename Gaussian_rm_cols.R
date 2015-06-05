@@ -112,7 +112,7 @@ Gaussian_rref <- function(A, simplify = FALSE){
   # Now Let's Focus On The Elimination
   for(i in 1:(new_m_rows - 1)){
     # Get lowest coefficient for cuurent variable
-    ind <- which(B[,i] == min(B[B[,i] != 0, i]))[1]
+    ind <- which(B[,i] == min(abs(B[B[,i] != 0, i])))[1]
     temp <- B[i,] # Save first row as temporary
     B[i,] <- B[ind,] # Set first row to have lowest coef
     B[ind,] <- temp # Complete the swap of rows
@@ -154,7 +154,9 @@ Gaussian_rref_adj <- function(A){
   count <- 0 # This will determine how many time we swap rows
   for(i in 1:(m_rows - 1)){
     # Get lowest coefficient for cuurent variable
-    ind <- which(B[,i] == min(B[B[,i] != 0, i]))[1]
+    ind <- which(B[,i] == min(abs(B[B[i:m_rows,i] != 0, i])))[1]
+    ind <- (i - 1) + ind # I noticed that the indices
+    # must be calibrated by how far from the first row we are
     # This determines if we have to swap rows
     if(ind != i){
       # I just realized that this if statement can save time
