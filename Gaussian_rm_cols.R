@@ -213,6 +213,12 @@ Rref_det <- function(A){
     }
   }
   # Now we can perform the adjusted rref function
-  # I will use a function that I created before to get
-  # diagonals of the matrices.
+  A_red <- Gaussian_rref_adj(A)$data # A reduced
+  sign_id <- Gaussian_rref_adj(A)$nber # Sign identifier
+  # If we swaped rows even nber of times, don't change sign
+  if(sign_id%%2 == 0){
+    return(prod(diag(A_red)))
+  } else {
+    return(-1*prod(diag(A_red)))
+  }
 }
