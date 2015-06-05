@@ -71,7 +71,7 @@ Gaussian_rref <- function(A, simplify = FALSE){
   }
   # There should be not be more rows than columns.
   m_rows <- nrow(A) # Matrix nber of rows
-  m_cols <- ncol(A) # Matriz nber of columns
+  m_cols <- ncol(A) # Matrix nber of columns
   
   B <- Zero_elim(A) # Remove all zero rows
   
@@ -112,15 +112,22 @@ Gaussian_rref <- function(A, simplify = FALSE){
   # Now Let's Focus On The Elimination
   for(i in 1:(new_m_rows - 1)){
     # Get lowest coefficient for cuurent variable
-    ind <- which(abs(B[,i]) == min(abs(B[B[i:new_m_rows,i] != 0, i])))[1]
-    ind <- (i - 1) + ind # Calibrating indices
-    # Putting the if statement here
-    if(ind != i){ # Only swap when ind != i
-    temp <- B[i,] # Save first row as temporary
-    B[i,] <- B[ind,] # Set first row to have lowest coef
-    B[ind,] <- temp # Complete the swap of rows
-    }
     
+    ref <- which(B[i:new_m_rows] != 0)
+    if(length(ref) > 0){
+      ref <- (i - 1) + ref # Adjust indices vis-a-vis i
+      ref <- min(abs(B[ref, i])) # Least Non Zero element in col 
+      # indices from i to m_rows that matches least nber
+      ind <- which(abs(B[i:new_m_rows,i]) == ref)[1]
+      ind <- (i - 1) + ind # calibrate
+      
+      if(ind != i){
+        temp <- B[i,] # Save first row as temporary
+        B[i,] <- B[ind,] # Set first row to have lowest coef
+        B[ind,] <- temp # Complete the swap of rows
+      }
+    }
+        
     pivot <- B[i,i] # Get leading coef of pivot row
     
     for(j in (i+1):new_m_rows){
@@ -161,10 +168,15 @@ Gaussian_rref_adj <- function(A){
   for(i in 1:(m_rows - 1)){
     # Get lowest coefficient for cuurent variable
     # Just noticed that abs is required on both ends
-    ind <- which(abs(B[,i]) == min(abs(B[B[i:m_rows,i] != 0, i])))[1]
-    ind <- (i - 1) + ind # I noticed that the indices
-    # must be calibrated by how far from the first row we are
-    # This determines if we have to swap rows
+    # Indices of non zero elmt in current column
+    ref <- which(B[i:m_rows] != 0)
+    if(length(ref) > 0){
+      ref <- (i - 1) + ref # Adjust indices vis-a-vis i
+      ref <- min(abs(B[ref, i])) # Least Non Zero element in col 
+      # indices from i to m_rows that matches least nber
+      ind <- which(abs(B[i:m_rows,i]) == ref)[1]
+      ind <- (i - 1) + ind # calibrate
+    
     if(ind != i){
       # I just realized that this if statement can save time
       # I will do the same to the previous Gaussian_rref
@@ -172,6 +184,7 @@ Gaussian_rref_adj <- function(A){
       temp <- B[i,] # Save first row as temporary
       B[i,] <- B[ind,] # Set first row to have lowest coef
       B[ind,] <- temp # Complete the swap of rows
+    }
     }
     
     pivot <- B[i,i] # Get leading coef of pivot row
@@ -237,7 +250,23 @@ sq_check <- function(A){
   }
 }
 
+## This function takes in a simplified Upper triangular matrix and
+# turns it into an identity matrix
+uptri_id <- function(A){
+  if(!is.matrix(A)){
+    stop("Cannot Apply Function: Non Matrix Input")
+  }
+  # zero out non diagonal entries
+  for(i in nrow(A):2){
+    for(j in (i-1):1){
+      A[j,] <- A[j,] - A[j,i]*A[i,]
+    }
+  }
+  return(A)
+}
+
 inv_mat <- function(A){
+  m_col <- ncol(A) # Number of columns
   if(!is.matrix(A)) {
     stop("Cannot Perform Operation: Not A Matrix")
   }
@@ -248,4 +277,12 @@ inv_mat <- function(A){
     stop("Cannot Perform Operation: 0 Determinant => 
          Not Invertible")
   }
+  # Perform a Gaussian_rref_adj on A and simplify
+  # First Append the identity matrix to A
+  A <- cbind(A,diag(nrow(A))) # nrow(A) = ncol(A) so we're fine
+  # There won't be any linearly dependent columns or rows
+  # Or zero rows or columns so we can rely Gaussian_rref.
+  A <- simp_mat(Gaussian_rref(A, simplify = TRUE))
+  A <- uptri_id(A)
+  return(A[,(m_col+1):(2*m_col)]) # Return right side of matrix
 }
