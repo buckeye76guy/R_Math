@@ -222,3 +222,30 @@ Rref_det <- function(A){
     return(-1*prod(diag(A_red)))
   }
 }
+
+## Inverse of a matrix
+# I will just create a function that checks whether a matrix
+# is a square matrix
+sq_check <- function(A){
+  if(!is.matrix(A)) {
+    stop("Cannot Perform Operation: Not A Matrix")
+  }
+  if(nrow(A) != ncol(A)){
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+
+inv_mat <- function(A){
+  if(!is.matrix(A)) {
+    stop("Cannot Perform Operation: Not A Matrix")
+  }
+  if(!sq_check(A)){
+    stop("Cannot Perform Operation: Not A Square Matrix")
+  }
+  if(Rref_det(A) == 0){
+    stop("Cannot Perform Operation: 0 Determinant => 
+         Not Invertible")
+  }
+}
