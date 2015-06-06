@@ -63,6 +63,30 @@ Zero_elim <- function(B){
   return(B)
 }
 
+### The Function That Makes Sure The Matrix Is Upper Triangular
+### Note that this function must only be applied after the
+### Gaussian_rref function.
+Up_sure <- function(A){
+  if(!is.matrix(A)){
+    stop("Cannot Perform Operation On Matrix")
+  }
+  # Simply find which row has non zero entry at row/col index
+  for(i in 1:nrow(A)){
+    # if current variable has 0 entry, change it
+    if(A[i,i] == 0){
+      if(any(A[i:nrow(A),i] != 0)){ 
+        # If any entry in this col != 0 take it
+        ref <- which(A[i:nrow(A),i] != 0)[1]
+        ref <- (i - 1) + ref # Calibration
+        temp <- A[i,]
+        A[i,] <- A[ref,] # Swap rows
+        A[ref,] <- temp
+      }
+    }
+  }
+  return(A)
+}
+
 # My Gaussian Elimination
 
 Gaussian_rref <- function(A, simplify = FALSE){
@@ -143,6 +167,7 @@ Gaussian_rref <- function(A, simplify = FALSE){
   # I should probably rearrange the matrix so that it is upper
   # Triangular in case it is not.
   # Simplify Coefficients : This Can Be Turned On Or Off
+  B <- Up_sure(B) # Make sure it is upper triangular
   if(simplify) {
     return(simp_mat(B))
   } else {
@@ -200,6 +225,7 @@ Gaussian_rref_adj <- function(A){
       }
     }
   }   
+  B <- Up_sure(B) # Make sure it is upper triangular
   return(list(data = B, nber = count))
 }
 ###
