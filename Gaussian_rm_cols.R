@@ -135,10 +135,13 @@ Gaussian_rref <- function(A, simplify = FALSE){
       # Update current row to eliminate leading coef
 #      B[j,] <- mul*B[i,] - pivot*B[j,]
       # Use this instead: it avoids large nbers
-      B[j,] <- B[j,]  - (mul/pivot)*B[i,]
+      if(pivot != 0){ # Avoid division by 0
+        B[j,] <- B[j,]  - (mul/pivot)*B[i,]
+      } # If the pivot was zero then ignore this variable.      
     }
   } 
-  
+  # I should probably rearrange the matrix so that it is upper
+  # Triangular in case it is not.
   # Simplify Coefficients : This Can Be Turned On Or Off
   if(simplify) {
     return(simp_mat(B))
@@ -192,7 +195,9 @@ Gaussian_rref_adj <- function(A){
     for(j in (i+1):m_rows){
       mul = B[j,i] # Get leading coef of current row
       # Update current row to eliminate leading coef
-      B[j,] <- B[j,]  - (mul/pivot)*B[i,]
+      if(pivot != 0){
+        B[j,] <- B[j,]  - (mul/pivot)*B[i,]
+      }
     }
   }   
   return(list(data = B, nber = count))
