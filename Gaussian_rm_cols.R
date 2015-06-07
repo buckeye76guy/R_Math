@@ -77,6 +77,10 @@ Up_sure <- function(A){
     if(A[i,i] == 0){
       if(any(A[i:nrow(A),i] != 0)){ 
         # If any entry in this col != 0 take it
+        # Here I do not really need the [1] since a good rref
+        # should guarantee that after zeroing out rows below
+        # a pivot, the pivot remains the last possible row with
+        # non zero entry at row/col index
         ref <- which(A[i:nrow(A),i] != 0)[1]
         ref <- (i - 1) + ref # Calibration
         if(ref != i){ # Keeping track of row changes
@@ -141,7 +145,7 @@ Gaussian_rref <- function(A, simplify = FALSE){
   for(i in 1:(new_m_rows - 1)){
     # Get lowest coefficient for cuurent variable
     
-    ref <- which(B[i:new_m_rows] != 0)
+    ref <- which(B[i:new_m_rows,i] != 0)
     if(length(ref) > 0){
       ref <- (i - 1) + ref # Adjust indices vis-a-vis i
       ref <- min(abs(B[ref, i])) # Least Non Zero element in col 
@@ -201,7 +205,7 @@ Gaussian_rref_adj <- function(A){
     # Get lowest coefficient for cuurent variable
     # Just noticed that abs is required on both ends
     # Indices of non zero elmt in current column
-    ref <- which(B[i:m_rows] != 0)
+    ref <- which(B[i:m_rows,i] != 0)
     if(length(ref) > 0){
       ref <- (i - 1) + ref # Adjust indices vis-a-vis i
       ref <- min(abs(B[ref, i])) # Least Non Zero element in col 
