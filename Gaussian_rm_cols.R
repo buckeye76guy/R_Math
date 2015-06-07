@@ -231,6 +231,14 @@ Gaussian_rref_adj <- function(A){
       if(pivot != 0){
         B[j,] <- B[j,]  - (mul/pivot)*B[i,]
       }
+      # Quick Note to self: Ignoring row operations when pivot=0
+      # Is justified: If it is 0 then either the entire column
+      # is zero which is handled in Gaussian_rref by zero_elim.
+      # In Gaussian_rref_adj however this simply means that
+      # We ignore entire column and get determinant = 0 which is
+      # Handled inside inv_mat. The other case would be that
+      # At least one entry above pivot row is non zero so
+      # We are fine! That's the goal of rref.
     }
   }
   new_count <- Up_sure(B)$nber
