@@ -305,6 +305,7 @@ uptri_id <- function(A){
   return(A)
 }
 
+### The inverse of a matrix
 inv_mat <- function(A){
   m_col <- ncol(A) # Number of columns
   if(!is.matrix(A)) {
@@ -325,4 +326,9 @@ inv_mat <- function(A){
   A <- Gaussian_rref(A, simplify = TRUE)
   A <- uptri_id(A)
   return(A[,(m_col+1):(2*m_col)]) # Return right side of matrix
+}
+
+### Now I will attempt to create my own solve function
+my_solve <- function(A){
+  # This must only rely on Gaussian_rref
 }
