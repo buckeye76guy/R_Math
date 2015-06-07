@@ -71,6 +71,7 @@ Up_sure <- function(A){
     stop("Cannot Perform Operation On Matrix")
   }
   # Simply find which row has non zero entry at row/col index
+  safety_count <- 0
   for(i in 1:nrow(A)){
     # if current variable has 0 entry, change it
     if(A[i,i] == 0){
@@ -78,13 +79,16 @@ Up_sure <- function(A){
         # If any entry in this col != 0 take it
         ref <- which(A[i:nrow(A),i] != 0)[1]
         ref <- (i - 1) + ref # Calibration
+        if(ref != i){ # Keeping track of row changes
+          safety_count <- safety_count + 1
+        }
         temp <- A[i,]
         A[i,] <- A[ref,] # Swap rows
         A[ref,] <- temp
       }
     }
   }
-  return(A)
+  return(list(data = A, nber = safety_count))
 }
 
 # My Gaussian Elimination
@@ -167,7 +171,7 @@ Gaussian_rref <- function(A, simplify = FALSE){
   # I should probably rearrange the matrix so that it is upper
   # Triangular in case it is not.
   # Simplify Coefficients : This Can Be Turned On Or Off
-  B <- Up_sure(B) # Make sure it is upper triangular
+  B <- Up_sure(B)$data # Make sure it is upper triangular
   if(simplify) {
     return(simp_mat(B))
   } else {
@@ -224,9 +228,10 @@ Gaussian_rref_adj <- function(A){
         B[j,] <- B[j,]  - (mul/pivot)*B[i,]
       }
     }
-  }   
-  B <- Up_sure(B) # Make sure it is upper triangular
-  return(list(data = B, nber = count))
+  }
+  new_count <- Up_sure(B)$nber
+  B <- Up_sure(B)$data # Make sure it is upper triangular
+  return(list(data = B, nber = count + new_count))
 }
 ###
 
