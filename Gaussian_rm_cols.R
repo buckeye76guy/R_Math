@@ -291,11 +291,13 @@ sq_check <- function(A){
   if(!is.matrix(A)) {
     stop("Cannot Perform Operation: Not A Matrix")
   }
-  if(nrow(A) != ncol(A)){
-    return(FALSE)
-  } else {
-    return(TRUE)
-  }
+#   if(nrow(A) != ncol(A)){
+#     return(FALSE)
+#   } else {
+#     return(TRUE)
+#   }
+  # Save line and make the code more elegant!
+  return(nrow(A) == ncol(A)) # Done
 }
 
 ## This function takes in a simplified Upper triangular matrix and
