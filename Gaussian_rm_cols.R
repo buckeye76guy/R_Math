@@ -350,7 +350,7 @@ my_solve <- function(A){
   B = Gaussian_rref(A)
   vec <- NULL
   for(i in nrow(B):1){
-    # Sum all nubers between col of this variable and last col
+    # Sum all numbers between col of this variable and last col
     temp = 0
     if(i != (ncol(A) - 1)){
       temp = sum(B[i, (i + 1):(ncol(A) - 1)] * vec[(nrow(A) - i):1])
