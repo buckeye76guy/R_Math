@@ -341,4 +341,22 @@ inv_mat <- function(A){
 ### Now I will attempt to create my own solve function
 my_solve <- function(A){
   # This must only rely on Gaussian_rref
+  if(ncol(A) != (nrow(A) + 1)){
+    stop("Sorry But Right Now We Do Not Support Matrices With: 
+         #rows != #cols - 1. Please Fix This And We Will Be Happy To Help :)
+         Also:: If You Have Linearly Dependent Rows | If You Have All Zero
+         Rows Or Columns |> We Will Not Return A Result! Thanks |> Beta Version")
+  }
+  B = Gaussian_rref(A)
+  vec <- NULL
+  for(i in nrow(B):1){
+    # Sum all nubers between col of this variable and last col
+    temp = 0
+    if(i != (ncol(A) - 1)){
+      temp = sum(B[i, (i + 1):(ncol(A) - 1)] * vec[(nrow(A) - i):1])
+    }
+    # Now subtract temp from last item in row and divide and append to vec
+    vec <- c(vec, (B[i,ncol(A)] - temp)/B[i,i])
+  }
+  return(vec[nrow(A):1])
 }
