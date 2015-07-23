@@ -364,7 +364,7 @@ my_solve <- function(A){
 ## My isEigenVector function to check if a vector v is an eigen vector:
 ## A*v = lambda*v
 isEigenVector <- function(A, v){
-  if(nrow(A) != ncol(A)){
+  if(!sq_check(A)){ # Making use of previously written function
     stop("Not A Square Matrix! Input Must Be A Square Matrix")
   }
   if(!is.vector(v) & !is.numeric(v) & length(v) != nrow(A)){
