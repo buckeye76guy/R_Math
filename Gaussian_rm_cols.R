@@ -382,9 +382,7 @@ EigenVal <- function(A, v){
 }
 
 ## Now Advanced: See If I can just input a matrix and have its Eigen vectors
-## And Eigen Values from the characteristic polynomial. Easy Way:: Use The 
-## Reduced Row Echelon To Get The To Be Upper Triangular! eigen values easily
-## picked Then find a way to solve for v!
+## And Eigen Values from the characteristic polynomial.
 allEigVals_Vecs <- function(A){
   
 }
