@@ -396,5 +396,27 @@ allEigVals_Vecs <- function(A){
 
 # Here you go: The series of isTriang(A) function
 isLowerTri <- function(A){
-  
+  if(!sq_check(A)){
+    stop("Only Square Matrices Can Satisfy This Criteria!")
+  }
+  return(all(as.vector(A)[which(as.vector(lower.tri(A)))] == 0))
+}
+
+isUpperTri <- function(A){
+  if(!sq_check(A)){
+    stop("Only Square Matrices Can Satisfy This Criteria!")
+  }
+  return(all(as.vector(A)[which(as.vector(upper.tri(A)))] == 0))
+}
+
+# Checks if a matrix is triangular. If Tell = "Yes" then we say whether 
+# The matrix is upper or lower triangular
+isTriangular <- function(A, Tell = "Yes"){
+  return(list(Tri_Status = isLowerTri(A) || isUpperTri(A),
+              Tri_Type = ifelse(tolower(Tell) != "yes", "",
+                                ifelse(!(isLowerTri(A) || isUpperTri(A)),
+                                "Sorry || This Matrix Is Not Triangular",
+                                ifelse(isLowerTri(A), 
+                                        "This Matrix is Lower Triangular", 
+                                        "This Matrix is Upper Triangular")))))
 }
