@@ -360,3 +360,41 @@ my_solve <- function(A){
   }
   return(vec[nrow(A):1])
 }
+
+## My isEigenVector function to check if a vector v is an eigen vector:
+## A*v = lambda*v
+isEigenVector <- function(A, v){
+  if(nrow(A) != ncol(A)){
+    stop("Not A Square Matrix! Input Must Be A Square Matrix")
+  }
+  if(!is.vector(v) & !is.numeric(v) & length(v) != nrow(A)){
+    stop("v Must Be A Numeric Vector Of Length = nrow(A")
+  }
+  return(Linear_check(as.vector(A%*%v), v)) ## If A*v and v are linearly dependent!
+}
+
+## My EigenVal function to give the eigenvalue associated with a Eigen vector
+EigenVal <- function(A, v){
+  if(!isEigenVector(A, v)){
+    stop("This Vector Is Not An Eigen Vector Of This Matrix")
+  }
+  return((A%*%v)[1]/v[1])
+}
+
+## Now Advanced: See If I can just input a matrix and have its Eigen vectors
+## And Eigen Values from the characteristic polynomial. Easy Way:: Use The 
+## Reduced Row Echelon To Get The To Be Upper Triangular! eigen values easily
+## picked Then find a way to solve for v!
+allEigVals_Vecs <- function(A){
+  
+}
+
+## Quick Notes: To Create A function to check whether a function is lower
+## triangular or upper triangular, I can do: lower.tri(A) and check if all the
+## indices that are TRUE are 0. Otherwise it is not lower triangular. Same 
+## Thing with Upper triangular check
+
+# Here you go: The series of isTriang(A) function
+isLowerTri <- function(A){
+  
+}
