@@ -68,3 +68,6 @@ randomizeClass <- function(vec){
   
   return(df)
 }
+
+vec <- readLines("MTH012.txt")
+Class_Groups <- randomizeClass(vec)
