@@ -10,7 +10,8 @@
 # can just quickly modify the names to keep our code the same
 
 randomizeClass <- function(vec){
-  set.seed(2015)
+  if(any(vec == "Student_Name")) vec <- vec[-which(vec == "Student_Name")]
+  set.seed(20160291)
   Size <- length(vec)
   if(Size %% 4 == 0){
     df <- data.frame(matrix(nrow = 4, ncol = (Size/4)))
@@ -69,5 +70,8 @@ randomizeClass <- function(vec){
   return(df)
 }
 
-vec <- readLines("MTH012.txt")
-Class_Groups <- randomizeClass(vec)
+# vec <- readLines("MTH124_012.txt")
+# Class_Group_012 = randomizeClass(vec)
+
+vec <- readLines("MTH124_038.txt")
+Class_Group_038 <- randomizeClass(vec)
