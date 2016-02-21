@@ -55,6 +55,7 @@ cGrades <- cbind(Personalinfo, webwork, projs, exams, final) %>%
                                                                       ifelse(GPA == 1.5, "D+",
                                                                              ifelse(GPA == 1.0, "D", "F"))))))))
 ### An experiment with full grades works
+# x is the lastname
 gd_final <- function(x){
   return(filter(cGrades, LastName == x) %>% select(c(wwork, ldScore, Ex1, Ex2, FINAL, total, GPA,
                                                      LGrade)))

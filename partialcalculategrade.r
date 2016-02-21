@@ -40,9 +40,10 @@ PFS <- 100 # Possible Final Score
 final <- mutate(final, fdScore = FINAL/PFS)
 
 Windex <- which(grades$LastName == "MAX") # index for max values per hw
-# b/c max will be 100 and we have to check column with all 0
+# b/c max will be 100 and we have to check column with all 0..
 wtemp <- webwork[-Windex,] # remove the max out
 # See the first column with all NA! that tells you how many HW were due
+# May not always work since some students begin hw early. I can change m manually though
 m <- which(apply(wtemp[,1:ncol(wtemp)] == 0, 2, all))[1] # first col with all 0
 if(!is.na(m)){
 webwork <- webwork[,1:(m-1)] # retain the hw that were due
@@ -72,7 +73,7 @@ cGrades <- cbind(Personalinfo, webwork, projs, exams, final) %>%
                                                                       ifelse(GPA == 1.5, "D+",
                                                                              ifelse(GPA == 1.0, "D", "F"))))))))
 ### An experiment with full grades works
-
+# x is the student last name, y is the target GPA
 gd <- function(x,y){
   a <- filter(cGrades, LastName == x) %>% select(c(wwork, ldScore, Ex1, Ex2, total)) %>% 
     mutate(percentagenow = 100*total/70, Need_final = y - total, 
